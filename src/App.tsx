@@ -1,20 +1,22 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import MainBottomTabNavigator from "./navigations/MainBottomTabNavigator";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function App() {
-	return (
-		<View style={styles.container}>
-			<Text>Open up App.tsx to start working on your app!</Text>
-			<StatusBar style="auto" />
-		</View>
-	);
-}
+  // 환경변수 확인을 위한 useEffect
+  useEffect(() => {
+    console.warn("Environment Check:", {
+      NAVER_CLIENT_ID: process.env.EXPO_PUBLIC_NAVER_CLIENT_ID,
+      // 다른 환경변수들도 필요하다면 여기에 추가
+    });
+  }, []);
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: '#fff',
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-});
+  return (
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <MainBottomTabNavigator />
+      </NavigationContainer>
+    </SafeAreaProvider>
+  );
+}
