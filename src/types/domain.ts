@@ -1,8 +1,11 @@
 interface User {
   id: number;
-  name: string;
+  nickname: string;
   email: string;
-  [key: string]: any;
+  role: string;
+  country: string;
+  profileUrl: string;
+  provider: string;
 }
 
 interface Tour {

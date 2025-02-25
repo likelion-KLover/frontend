@@ -1,4 +1,4 @@
-import { Tabs } from "expo-router";
+import { Tabs } from 'expo-router';
 
 export default function RootTabLayout() {
   return (
@@ -6,7 +6,7 @@ export default function RootTabLayout() {
       <Tabs.Screen
         name="Home"
         options={{
-          title: "Home",
+          title: 'Home',
         }}
       />
       <Tabs.Screen name="Explore" />

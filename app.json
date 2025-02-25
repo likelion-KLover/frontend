@@ -1,21 +1,23 @@
 {
 	"expo": {
-		"name": "client",
-		"slug": "client",
+		"name": "klover",
+		"slug": "klover",
 		"version": "1.0.0",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
-		"scheme": "client",
+		"scheme": "com.anonymous.klover",
 		"userInterfaceStyle": "automatic",
 		"newArchEnabled": true,
 		"ios": {
-			"supportsTablet": true
+			"supportsTablet": true,
+			"bundleIdentifier": "com.anonymous.klover"
 		},
 		"android": {
 			"adaptiveIcon": {
 				"foregroundImage": "./assets/adaptive-icon.png",
 				"backgroundColor": "#ffffff"
-			}
+			},
+			"package":"com.anonymous.klover"
 		},
 		"web": {
 			"bundler": "metro",
@@ -38,7 +40,8 @@
 				{
 					"fonts": ["./assets/fonts/Poppins-Bold.ttf"]
 				}
-			]
+			],
+      "@xmartlabs/react-native-line"
 		]
 	}
 }
