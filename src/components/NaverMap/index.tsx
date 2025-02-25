@@ -1,6 +1,7 @@
 import React, { memo, useRef, useState, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
-import WebView from "react-native-webview";
+import WebView, { WebViewMessageEvent } from "react-native-webview";
+import type { WebViewErrorEvent } from "react-native-webview/lib/WebViewTypes";
 import { MAP_CONFIG } from "../../constants/map";
 import type { NaverMapProps, MapMessage } from "../../types/map";
 
@@ -118,13 +119,13 @@ export const NaverMap: React.FC<NaverMapProps> = memo(
             console.log("WebView loading completed");
             setIsLoading(false);
           }}
-          onError={(syntheticEvent) => {
+          onError={(syntheticEvent: WebViewErrorEvent) => {
             const { description, url } = syntheticEvent.nativeEvent;
             console.error(`WebView error: ${description} (${url})`);
             setError(description);
             onMapError?.(description);
           }}
-          onMessage={(event) => {
+          onMessage={(event: WebViewMessageEvent) => {
             try {
               const data = JSON.parse(event.nativeEvent.data);
               console.log("WebView message:", data);

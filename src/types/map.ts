@@ -9,7 +9,11 @@ export interface MapMessage {
 
 export interface NaverMapProps {
   style?: any;
+  initialCenter?: {
+    latitude: number;
+    longitude: number;
+  };
   onMarkerSelect?: (lat: number, lng: number) => void;
-  onMapError?: (error: string) => void; // 추가
-  onMapLoad?: () => void; // 추가
+  onMapError?: (error: string) => void;
+  onMapLoad?: () => void;
 }
