@@ -19,7 +19,8 @@
         "NSLocationWhenInUseUsageDescription": "위치 정보를 사용하여 지도에 현재 위치를 표시합니다.",
         "NSAppTransportSecurity": {
           "NSAllowsArbitraryLoads": true
-        }
+        },
+        "NMFClientId": "cn1k4vcrp8"
       }
     },
     "android": {
@@ -28,7 +29,11 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.team.klover",
-      "permissions": ["ACCESS_FINE_LOCATION"]
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "INTERNET"
+      ]
     },
     "web": {
       "favicon": "./src/assets/favicon.png"

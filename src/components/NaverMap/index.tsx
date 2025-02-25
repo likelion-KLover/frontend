@@ -6,11 +6,15 @@ import { MAP_CONFIG } from "../../constants/map";
 import type { NaverMapProps, MapMessage } from "../../types/map";
 
 export const NaverMap: React.FC<NaverMapProps> = memo(
-  ({ onMarkerSelect, onMapError, onMapLoad }) => {
+  ({ initialCenter, onMarkerSelect, onMapError, onMapLoad }) => {
     const webViewRef = useRef<WebView>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [isMapInitialized, setIsMapInitialized] = useState(false);
+    const NAVER_CLIENT_ID = "cn1k4vcrp8"; //임시 하드코딩
+
+    // initialCenter 사용 (없으면 기본값 사용)
+    const center = initialCenter || MAP_CONFIG.INITIAL_CENTER;
 
     useEffect(() => {
       console.log("NaverMap component mounted");
@@ -40,7 +44,7 @@ export const NaverMap: React.FC<NaverMapProps> = memo(
             left: 0;
           }
         </style>
-        <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${process.env.EXPO_PUBLIC_NAVER_CLIENT_ID}"></script>
+        <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${NAVER_CLIENT_ID}"></script>
       </head>
       <body>
         <div id="map"></div>
@@ -59,12 +63,13 @@ export const NaverMap: React.FC<NaverMapProps> = memo(
           function initializeMap() {
             try {
               console.log('Initializing map...');
+              
               if (!window.naver || !window.naver.maps) {
                 throw new Error('Naver Maps SDK not loaded');
               }
 
               mapInstance = new naver.maps.Map('map', {
-                center: new naver.maps.LatLng(${MAP_CONFIG.INITIAL_CENTER.latitude}, ${MAP_CONFIG.INITIAL_CENTER.longitude}),
+                center: new naver.maps.LatLng(${center.latitude}, ${center.longitude}),
                 zoom: ${MAP_CONFIG.INITIAL_ZOOM},
                 zoomControl: true,
                 zoomControlOptions: {
@@ -105,23 +110,11 @@ export const NaverMap: React.FC<NaverMapProps> = memo(
       <View style={styles.container}>
         <WebView
           ref={webViewRef}
-          style={[
-            styles.webview,
-            // 지도가 초기화되기 전까지는 투명하게 유지
-            !isMapInitialized && { opacity: 0 },
-          ]}
           source={{ html }}
-          onLoadStart={() => {
-            console.log("WebView loading started");
-            setIsLoading(true);
-          }}
-          onLoadEnd={() => {
-            console.log("WebView loading completed");
-            setIsLoading(false);
-          }}
+          style={styles.webview}
           onError={(syntheticEvent: WebViewErrorEvent) => {
             const { description, url } = syntheticEvent.nativeEvent;
-            console.error(`WebView error: ${description} (${url})`);
+            console.error("WebView error:", description);
             setError(description);
             onMapError?.(description);
           }}
@@ -130,8 +123,10 @@ export const NaverMap: React.FC<NaverMapProps> = memo(
               const data = JSON.parse(event.nativeEvent.data);
               console.log("WebView message:", data);
 
+              if (data.type === "error") {
+                console.error("Map error:", data.message);
+              }
               if (data.type === "mapInit" && data.status === "success") {
-                // 지도 초기화가 완료되면 화면에 표시
                 setIsMapInitialized(true);
                 onMapLoad?.();
               }
@@ -139,9 +134,8 @@ export const NaverMap: React.FC<NaverMapProps> = memo(
               console.error("Message parsing error:", error);
             }
           }}
-          javaScriptEnabled={true}
-          domStorageEnabled={true}
           originWhitelist={["*"]}
+          javaScriptEnabled={true}
           scrollEnabled={false}
           bounces={false}
         />
