@@ -1,11 +1,33 @@
+import { images } from './images';
+
+export const onboarding = [
+  {
+    id: 1,
+    title: `The perfect ride is just a tap away!`,
+    description: `Your journey begins with Ryde. Find your ideal ride effortlessly.`,
+    image: images.onboarding1,
+  },
+  {
+    id: 2,
+    title: 'Best car in your hands with Ryde',
+    description: 'Discover the convenience of finding your perfect ride with Ryde',
+    image: images.onboarding2,
+  },
+  {
+    id: 3,
+    title: "Your ride, your way. Let's go!",
+    description: 'Enter your destination, sit back, and let us take care of the rest.',
+    image: images.onboarding3,
+  },
+];
+
 export const tourData = [
   {
     id: 1,
-    title: "Best Of Paris In 7 Days Tour",
-    address: "Paris",
-    first_image:
-      "http://tong.visitkorea.or.kr/cms/resource/06/2644606_image2_1.jpg",
-    homepage: "https://www.parisinfo.com/",
+    title: 'Best Of Paris In 7 Days Tour',
+    address: 'Paris',
+    first_image: 'http://tong.visitkorea.or.kr/cms/resource/06/2644606_image2_1.jpg',
+    homepage: 'https://www.parisinfo.com/',
     map_x: 48.8566,
     map_y: 2.3522,
     overview:
@@ -13,11 +35,10 @@ export const tourData = [
   },
   {
     id: 2,
-    title: "Best Of Rome In 7 Days Tour",
-    address: "Rome",
-    first_image:
-      "http://tong.visitkorea.or.kr/cms/resource/06/2644606_image2_1.jpg",
-    homepage: "https://www.rome.info/",
+    title: 'Best Of Rome In 7 Days Tour',
+    address: 'Rome',
+    first_image: 'http://tong.visitkorea.or.kr/cms/resource/06/2644606_image2_1.jpg',
+    homepage: 'https://www.rome.info/',
     map_x: 41.9028,
     map_y: 12.4964,
     overview:
@@ -25,11 +46,10 @@ export const tourData = [
   },
   {
     id: 3,
-    title: "Best Of Venice, Florence & Rome In 10 Days Tour",
-    address: "Venice, Florence, Rome",
-    first_image:
-      "http://tong.visitkorea.or.kr/cms/resource/06/2644606_image2_1.jpg",
-    homepage: "https://www.italia.it/",
+    title: 'Best Of Venice, Florence & Rome In 10 Days Tour',
+    address: 'Venice, Florence, Rome',
+    first_image: 'http://tong.visitkorea.or.kr/cms/resource/06/2644606_image2_1.jpg',
+    homepage: 'https://www.italia.it/',
     map_x: 41.9028,
     map_y: 12.4964,
     overview:
@@ -37,11 +57,10 @@ export const tourData = [
   },
   {
     id: 4,
-    title: "Best Of London In 7 Days Tour",
-    address: "London",
-    first_image:
-      "http://tong.visitkorea.or.kr/cms/resource/06/2644606_image2_1.jpg",
-    homepage: "https://www.visitlondon.com/",
+    title: 'Best Of London In 7 Days Tour',
+    address: 'London',
+    first_image: 'http://tong.visitkorea.or.kr/cms/resource/06/2644606_image2_1.jpg',
+    homepage: 'https://www.visitlondon.com/',
     map_x: 51.5074,
     map_y: 0.1278,
     overview:

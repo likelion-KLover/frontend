@@ -1,12 +1,12 @@
-import useAuthStore from '@/src/stores/authStore';
-import * as authApi from '@/src/apis/authApi';
-import { useRouter } from 'expo-router';
-import { useMutation, useQueryClient } from 'react-query';
-import { User } from '@/src/types';
-import EncryptedStorage from 'react-native-encrypted-storage';
-import { Alert } from 'react-native';
-import LineLogin from '@xmartlabs/react-native-line';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import LineLogin from '@xmartlabs/react-native-line';
+import { useRouter } from 'expo-router';
+import * as SecureStore from 'expo-secure-store';
+import { Alert } from 'react-native';
+import { useMutation, useQueryClient } from 'react-query';
+
+import * as authApi from '@/src/apis/authApi';
+import useAuthStore from '@/src/stores/authStore';
 
 export const useAuthQueries = () => {
   const queryClient = useQueryClient();
@@ -19,9 +19,9 @@ export const useAuthQueries = () => {
     {
       onSuccess: (data: { accessToken: string; refreshToken: string; memberDto: User }) => {
         setUser(data.memberDto);
-        EncryptedStorage.setItem('user', JSON.stringify(data.memberDto));
-        EncryptedStorage.setItem('accessToken', data.accessToken);
-        EncryptedStorage.setItem('refreshToken', data.refreshToken);
+        SecureStore.setItem('user', JSON.stringify(data.memberDto));
+        SecureStore.setItem('accessToken', data.accessToken);
+        SecureStore.setItem('refreshToken', data.refreshToken);
 
         Alert.alert('서버 로그인 성공', '와 해냈다');
         //router.replace('/(tabs)/home');
@@ -37,9 +37,9 @@ export const useAuthQueries = () => {
   const GoogleLoginMutation = useMutation(() => authApi.googleLogin(), {
     onSuccess: (data: { accessToken: string; refreshToken: string; memberDto: User }) => {
       setUser(data.memberDto);
-      EncryptedStorage.setItem('user', JSON.stringify(data.memberDto));
-      EncryptedStorage.setItem('accessToken', data.accessToken);
-      EncryptedStorage.setItem('refreshToken', data.refreshToken);
+      SecureStore.setItem('user', JSON.stringify(data.memberDto));
+      SecureStore.setItem('accessToken', data.accessToken);
+      SecureStore.setItem('refreshToken', data.refreshToken);
 
       Alert.alert('구글 로그인 성공', '와 해냈다');
       //router.replace('/(tabs)/home');
@@ -54,9 +54,9 @@ export const useAuthQueries = () => {
   const LineLoginMutation = useMutation(() => authApi.lineLogin(), {
     onSuccess: (data: { accessToken: string; refreshToken: string; memberDto: User }) => {
       setUser(data.memberDto);
-      EncryptedStorage.setItem('user', JSON.stringify(data.memberDto));
-      EncryptedStorage.setItem('accessToken', data.accessToken);
-      EncryptedStorage.setItem('refreshToken', data.refreshToken);
+      SecureStore.setItem('user', JSON.stringify(data.memberDto));
+      SecureStore.setItem('accessToken', data.accessToken);
+      SecureStore.setItem('refreshToken', data.refreshToken);
 
       Alert.alert('라인 로그인 성공', '와 해냈다');
       //router.replace('/(tabs)/home');
@@ -75,9 +75,9 @@ export const useAuthQueries = () => {
     },
 
     onSettled: async () => {
-      EncryptedStorage.removeItem('user');
-      EncryptedStorage.removeItem('accessToken');
-      EncryptedStorage.removeItem('refreshToken');
+      SecureStore.deleteItemAsync('user');
+      SecureStore.deleteItemAsync('accessToken');
+      SecureStore.deleteItemAsync('refreshToken');
       queryClient.clear();
 
       if (user?.provider === 'google') {
@@ -86,7 +86,7 @@ export const useAuthQueries = () => {
 
       if (user?.provider === 'line') {
         LineLogin.logout();
-        EncryptedStorage.removeItem('providerAccessToken');
+        SecureStore.deleteItemAsync('providerAccessToken');
       }
       setUser(null);
     },
@@ -111,7 +111,7 @@ export const useAuthQueries = () => {
 
   const RefreshAccessTokenMutation = useMutation(() => authApi.refreshAccessToken(), {
     onSuccess: (accessToken: string) => {
-      EncryptedStorage.setItem('accessToken', accessToken);
+      SecureStore.setItem('accessToken', accessToken);
     },
     onError: (error: any) => {
       setError(error);
@@ -121,9 +121,9 @@ export const useAuthQueries = () => {
 
   const DeleteAccountMutation = useMutation(() => authApi.deleteAccount(), {
     onSuccess: async () => {
-      EncryptedStorage.removeItem('user');
-      EncryptedStorage.removeItem('accessToken');
-      EncryptedStorage.removeItem('refreshToken');
+      SecureStore.deleteItemAsync('user');
+      SecureStore.deleteItemAsync('accessToken');
+      SecureStore.deleteItemAsync('refreshToken');
       queryClient.clear();
 
       if (user?.provider === 'google') {
@@ -132,7 +132,7 @@ export const useAuthQueries = () => {
 
       if (user?.provider === 'line') {
         //라인 로그인 시에는 line이 준 AccessToken을 따로 보관함
-        const providerAccessToken = await EncryptedStorage.getItem('providerAccessToken');
+        const providerAccessToken = await SecureStore.getItem('providerAccessToken');
 
         const revokeUrl = 'https://api.line.me/oauth2/v2.1/revoke';
         const revokeParams = new URLSearchParams();
@@ -148,7 +148,7 @@ export const useAuthQueries = () => {
           body: revokeParams.toString(),
         });
 
-        EncryptedStorage.removeItem('providerAccessToken');
+        SecureStore.deleteItemAsync('providerAccessToken');
       }
 
       setUser(null);

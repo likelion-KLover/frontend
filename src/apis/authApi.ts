@@ -1,8 +1,8 @@
-import axios, { AxiosInstance } from 'axios';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import LineLogin, { BotPrompt, LoginPermission } from '@xmartlabs/react-native-line';
+import axios, { AxiosInstance } from 'axios';
+import * as SecureStore from 'expo-secure-store';
 import * as WebBrowser from 'expo-web-browser';
-import EncryptedStorage from 'react-native-encrypted-storage';
 
 const apiBaseUrl = `http://${process.env.EXPO_PUBLIC_BACKEND_SERVER_IP}:8080`;
 
@@ -59,7 +59,7 @@ export const lineLogin = async () => {
   if (!result) throw Error('라인 로그인 실패');
 
   const idToken = result.accessToken?.idToken;
-  EncryptedStorage.setItem('providerAccessToken', result.accessToken?.accessToken);
+  SecureStore.setItem('providerAccessToken', result.accessToken?.accessToken);
 
   const response = await authApi.post('/api/v1/auth/line', { idToken });
 
@@ -69,8 +69,8 @@ export const lineLogin = async () => {
 };
 
 export const logout = async () => {
-  const refreshToken = await EncryptedStorage.getItem('refreshToken');
-  const accessToken = await EncryptedStorage.getItem('accessToken');
+  const refreshToken = await SecureStore.getItemAsync('refreshToken');
+  const accessToken = await SecureStore.getItemAsync('accessToken');
 
   const response = await authApi.post(
     '/api/v1/auth/logout',
@@ -98,7 +98,7 @@ export const signup = async (email: string, password: string, nickname: string) 
 };
 
 export const refreshAccessToken = async () => {
-  const refreshToken = await EncryptedStorage.getItem('refreshToken');
+  const refreshToken = await SecureStore.getItemAsync('refreshToken');
 
   const response = await authApi.post('/api/v1/auth/refresh', { refreshToken });
   const body = response.data;
@@ -107,7 +107,7 @@ export const refreshAccessToken = async () => {
 };
 
 export const deleteAccount = async () => {
-  const accessToken = await EncryptedStorage.getItem('accessToken');
+  const accessToken = await SecureStore.getItemAsync('accessToken');
 
   const response = await authApi.delete('/api/v1/members', { headers: { Authorization: `Bearer ${accessToken}` } });
 

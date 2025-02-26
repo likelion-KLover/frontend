@@ -1,8 +1,20 @@
 // https://docs.expo.dev/guides/using-eslint/
 module.exports = {
-  extends: ["expo", "prettier"],
-  plugins: ["prettier"],
+  extends: ['expo', 'prettier'],
+  plugins: ['prettier', 'import'],
   rules: {
-    "prettier/prettier": ["warn", { endOfLine: "auto" }],
+    'prettier/prettier': ['error', { endOfLine: 'auto' }],
+    'import/order': [
+      'error',
+      {
+        groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object', 'type'],
+        'newlines-between': 'always',
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true,
+        },
+      },
+    ],
+    'import/no-unresolved': 'off',
   },
 };

@@ -1,4 +1,4 @@
-interface User {
+declare interface User {
   id: number;
   nickname: string;
   email: string;
@@ -8,7 +8,7 @@ interface User {
   provider: string;
 }
 
-interface Tour {
+declare interface Tour {
   id: string;
   title: string;
   address: string;
@@ -18,5 +18,3 @@ interface Tour {
   map_y: string;
   overview: string;
 }
-
-export { User, Tour };
